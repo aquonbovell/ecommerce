@@ -1,0 +1,75 @@
+{% extends 'store/_base.html' %} {% block content %}
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Orders Shipped Dashboard</h1>
+      <p class="lead fw-normal text-white-50 mb-0">
+        View orders that have been shipped.
+      </p>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Orders Shipped Dashboard</h1>
+      <p>View orders that have been shipped.</p>
+      <div class="container">
+        <div class="row">
+          <h4 class="col-md-10">{{ order }}</h4>
+          {% if order.shipped %}
+          <form class="col-md-2" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="shipped" value="false">
+            <button type="submit" class="btn btn-danger">Mark as Not Shipped</button>
+          </form>
+          {% else %}
+          <form class="col-md-2" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="shipped" value="true">
+            <button type="submit" class="btn btn-primary">Mark as Shipped</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Order ID: {{ order.id }}</h5>
+          <p class="card-text">Order Date: {{ order.date_ordered }}</p>
+          <p class="card-text">Order Total: ${{ order.amount_paid }}</p>
+          <p class="card-text">Order Status: {{ order.shipped }}</p>
+          <p class="card-text">Shipped Date: {{ order.date_shipped }}</p>
+          <p class="card-text">Email: {{ order.email }}</p>
+          <p class="card-text">
+            Shipping Address: {{ order.shipping_address }}
+          </p>
+        </div>
+      </div>
+      {% if order_items %}
+      <table class="table table-striped table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Item ID</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Item Amount</th>
+            <th scope="col">Item Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order_items %}
+          <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.product }}</td>
+            <td>{{ item.product_quantity }}</td>
+            <td>${{ item.product_price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>No orders have been shipped.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'store/_base.html' %} {% block content %}
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Billing Info</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Your cart items</p>
+    </div>
+  </div>
+</header>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Order Summary</h1>
+    </div>
+  </div>
+  {% for product, quantity in cart_products %}
+  <div class="row">
+    <div class="card">
+      <div class="card-header">{{product.name}}</div>
+      <div class="card-body">
+        <h5 class="card-title">{{product.description}}</h5>
+        <p class="card-text">
+          Quantity: {{quantity}} {% if product.is_sale %}
+          <span class="badge bg-danger">${{product.sale_price}}</span>
+          {% else %}
+          <span class="badge bg-success">${{product.price}}</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="card mb-3 mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-10">
+          <h5 class="card-title">Total</h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="card-title">${{ totals }}</h5>
+        </div>
+      </div>
+      <div class="row justify-content-end">
+        <a class="btn btn-success col-md-2" href="{% url 'cart__summary' %}"
+          >Update Cart</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-6">
+    <div class="card-header">Shipping Info</div>
+    <div class="card-body">
+      {% if shipping_info %} {% for key, value in shipping_info.items %} 
+      {% if key != 'csrfmiddlewaretoken' %}
+      <p class="card-text">{{ key }}: {{ value }}</p>
+      {% endif %} {% endfor %} {% else %}
+      <p class="card-text">No shipping info</p>
+      {% endif %}
+      <a href="{% url 'checkout' %}" class="btn btn-primary mt-3"
+    >Update Shipping</a
+  >
+    </div>
+  </div>
+  <div class="card mt-3">
+    <div class="card-header">Billing Info</div>
+    <div class="card-body">
+      <form action="{% url 'process_order' %}" method="post">
+        {% csrf_token %} {% if billing_form.errors %}
+        <div class="alert alert-danger" role="alert">
+          {% for field in billing_form %} {% for error in field.errors %}
+          <strong>{{ field.label }}</strong>: {{ error }} {% endfor %} {% endfor %}
+        </div>
+        {% endif %}
+        {{ billing_form.as_p }}
+        <button type="submit" class="btn btn-primary">Pay Now</button>
+      </form>
+    </div>
+  </div>
+  
+</div>
+{% endblock %} {% block title %}Payment Success{% endblock %}

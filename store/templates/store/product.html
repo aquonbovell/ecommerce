@@ -1,0 +1,57 @@
+{% extends 'store/_base.html' %} {% block content %}
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Product Page</h1>
+    </div>
+  </div>
+</header>
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <img class="card-img-top" src="{{ product.image_url.url }}" alt="..." />
+        <div class="card-body p-4">
+          <div class="text-center">
+            <h2 class="fw-bolder">{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <div class="d-flex justify-content-center small text-warning mb-2">
+              {{product.category}} - ${{product.price}}
+            </div>
+          </div>
+        </div>
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+          <div class="text-center p-2">
+            Quantity:
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              onclick="document.getElementById('product-qty-{{product.id}}').textContent = Number(document.getElementById('product-qty-{{product.id}}').textContent) + 1"
+            >
+              +</button
+            ><span id="product-qty-{{product.id}}" class="px-2">1</span
+            ><button
+              type="button"
+              class="btn btn-outline-dark"
+              onclick="let amount = Number(document.getElementById('product-qty-{{product.id}}').textContent); if (amount <= 1) {  } else { amount -= 1} document.getElementById('product-qty-{{product.id}}').textContent = amount"
+            >
+              -
+            </button>
+          </div>
+          <div class="text-center p-2">
+            <button
+              class="btn btn-outline-dark mt-auto"
+              value="{{ product.id }}"
+              id="add-cart"
+            >
+              Add To Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

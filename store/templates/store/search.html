@@ -1,0 +1,59 @@
+{% extends 'store/_base.html' %} {% block content %}
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Search</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Search our catalogue</p>
+    </div>
+  </div>
+</header>
+
+<div class="container py-5">
+  <div class="card text-center w-75 mx-auto">
+    <div class="card-header">Search Products</div>
+    <div class="card-body">
+      <form method="post" class="d-inline-flex container-fluid">
+        {% csrf_token %}
+        <div class="form-group container-fluid">
+          <label for="query">Email address</label>
+          <input
+            type="text"
+            name="query"
+            class="form-control"
+            id="query"
+            aria-describedby="queryHelp"
+            placeholder="...Search"
+          />
+          <small id="queryHelp" class="form-text text-muted"
+            >You can search our items</small
+          >
+        </div>
+        <button type="submit" class="btn btn-primary align-self-center">
+          Submit
+        </button>
+      </form>
+      <div class="row">
+        {% for product in products %}
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <img
+              class="card-img-top"
+              src="{{ product.image_url.url }}"
+              alt="..."
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.description }}</p>
+              <a href="{% url 'product' product.id %}" class="btn btn-primary"
+                >View</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <a href="{% url 'home' %}" class="btn btn-primary">Go Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

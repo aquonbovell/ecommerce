@@ -1,0 +1,79 @@
+{% extends 'store/_base.html' %} {% block content %}
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Shopping Cart</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Your cart items</p>
+    </div>
+  </div>
+</header>
+
+<div class="container mt-3">
+  {% if cart_products|length < 1 %}
+  <div class="alert alert-info" role="alert">Your cart is empty</div>
+  {% else %} {% for product, quantity in cart_products %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-2">
+          <img src="{{ product.image_url.url }}" class="img-fluid" alt="..." />
+        </div>
+        <div class="col-md-8">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text">{{ product.category }} - ${{ product.price }}</p>
+          <div class="card-footer p-2">
+            Quantity:
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              onclick="document.getElementById('product-qty-{{product.id}}').textContent = Number(document.getElementById('product-qty-{{product.id}}').textContent) + 1"
+            >
+              +</button
+            ><span id="product-qty-{{product.id}}" class="px-2"
+              >{{quantity}}</span
+            ><button
+              type="button"
+              class="btn btn-outline-dark"
+              onclick="let amount = Number(document.getElementById('product-qty-{{product.id}}').textContent); if (amount <= 1) {  } else { amount -= 1} document.getElementById('product-qty-{{product.id}}').textContent = amount"
+            >
+              -
+            </button>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button
+            type="button"
+            data-index="{{product.id}}"
+            class="btn btn-danger delete-cart"
+          >
+            Remove
+          </button>
+          <button
+            type="button"
+            data-index="{{product.id}}"
+            class="btn btn-primary update-cart"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %} {% endif %}
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-10">
+          <h5 class="card-title">Total</h5>
+        </div>
+        <div class="col-md-2">
+          <h5 class="card-title">${{ totals }}</h5>
+        </div>
+      </div>
+      <div class="row justify-content-end"><a class="btn btn-success col-md-2 " href="{% url 'checkout' %}" >Checkout</a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
