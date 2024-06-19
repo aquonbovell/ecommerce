@@ -21,7 +21,13 @@
         <div class="col-md-8">
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">{{ product.description }}</p>
-          <p class="card-text">{{ product.category }} - ${{ product.price }}</p>
+          <p class="card-text">
+            {{ product.category }} - 
+            {% if product.is_sale %}
+            <strike>${{ product.price }}</strike>
+            ${{ product.sale_price }} 
+            {% else %} ${{ product.price }} {% endif%}
+          </p>
           <div class="card-footer p-2">
             Quantity:
             <button
@@ -72,7 +78,11 @@
           <h5 class="card-title">${{ totals }}</h5>
         </div>
       </div>
-      <div class="row justify-content-end"><a class="btn btn-success col-md-2 " href="{% url 'checkout' %}" >Checkout</a></div>
+      <div class="row justify-content-end">
+        <a class="btn btn-success col-md-2" href="{% url 'checkout' %}"
+          >Checkout</a
+        >
+      </div>
     </div>
   </div>
 </div>
